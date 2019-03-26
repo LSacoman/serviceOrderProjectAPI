@@ -23,11 +23,18 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 			as: 'client'
         });
-        Model.belongsTo(models.Product, {
-            foreignKey: 'productId',
+        Model.belongsToMany(models.Product, {
+            through: 'ServiceOrder_Product',
 			allowNull: false,
-			as: 'product'
-        })
+			as: 'products',
+			foreignKey: 'ServiceOrderId'
+		});
+		Model.belongsToMany(models.Service, {
+            through: 'ServiceOrder_Service',
+			allowNull: false,
+			as: 'services',
+			foreignKey: 'ServiceOrderId'
+        });
     }
 
 	Model.prototype.toWeb = function(pw) {

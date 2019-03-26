@@ -113,9 +113,9 @@ const login = async function(req, res) {
     }else{
         return ReE(res, {message: 'Necessario login ou email'}, 422);
     }
-    if (err) return ReE(res, err, 422);
+    if (err) return ReE(res, err, 401);
     [err, user] = await to(user.comparePassword(req.body.password));
-    if (err) return ReE(res, err, 422);
+    if (err) return ReE(res, err, 401);
 
 	return ReS(res, { token: user.getJWT(), user: user.toWeb() });
 };

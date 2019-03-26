@@ -4,6 +4,7 @@ const router = express.Router();
 const UserController = require('../controllers/user.controller');
 const ProductController = require('../controllers/product.controller');
 const ServiceOrderController = require('../controllers/serviceOrder.controller');
+const ServiceController = require('../controllers/service.controller');
 const passport = require('passport');
 
 require('./../middleware/passport')(passport);
@@ -26,6 +27,11 @@ router.get('/products', passport.authenticate('jwt', { session: false }), Produc
 router.put('/product', passport.authenticate('jwt', { session: false }), ProductController.update);
 router.delete('/product/:id', passport.authenticate('jwt', { session: false }), ProductController.del);
 
+router.post('/service', ServiceController.create);
+router.get('/service/:id', passport.authenticate('jwt', { session: false }), ServiceController.getOne);
+router.get('/services', passport.authenticate('jwt', { session: false }), ServiceController.getAll);
+router.put('/service', passport.authenticate('jwt', { session: false }), ServiceController.update);
+router.delete('/service/:id', passport.authenticate('jwt', { session: false }), ServiceController.del);
 
 router.post('/serviceorder', ServiceOrderController.create);
 router.get('/serviceorder/:id', passport.authenticate('jwt', { session: false }), ServiceOrderController.getOne);

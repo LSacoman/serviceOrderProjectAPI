@@ -1,10 +1,10 @@
-const { Product, User, ServiceOrder } = require('../models');
+const { Product, User, ServiceOrder, Service } = require('../models');
 const { to, ReE, ReS } = require('../services/util.service');
 const models = require('../models');
 
 // Create serviceOrder
 const create = async (req, res) => {
-    let err, serviceOrder;
+    let err, serviceOrder, products, services;
     
 	if (req.body.client != null) {
 		[ err, client ] = await to(User.create(req.body.client));
@@ -16,14 +16,22 @@ const create = async (req, res) => {
 		if (err) return ReE(res, err, 422);
 		req.body.employeeId = employee.id;
 	}
-	if (req.body.product != null) {
-		[ err, product ] = await to(Product.create(req.body.product));
-		if (err) return ReE(res, err, 422);
-		req.body.productId = product.id;
-	}
 
 	[ err, serviceOrder ] = await to(ServiceOrder.create(req.body));
 	if (err) return ReE(res, err, 422);
+	if (req.body.products != null) {
+		[ err, products ] = await to(serviceOrder.addProducts(req.body.products));
+		if (err) return ReE(res, err, 422);
+		
+	}
+	if (req.body.services != null) {
+		[ err, services ] = await to(serviceOrder.addServices(req.body.services));
+		if (err) return ReE(res, err, 422);
+		
+	}
+	serviceOrder = serviceOrder.toWeb();
+	serviceOrder.products = products;
+	serviceOrder.services = services;
 	return ReS(res, { message: 'ServiceOrder criado com sucesso.', serviceOrder }, 201);
 };
 module.exports.create = create;
@@ -35,7 +43,8 @@ module.exports.getOne = async (req, res) => {
 			include: [
 				{ model: User, as: 'employee' },
 				{ model: User, as: 'client' },
-				{ model: Product, as: 'product' }
+				{ model: Product, as: 'products' },
+				{ model: Service, as: 'services' }
 			]
 		})
 	);
@@ -50,7 +59,8 @@ module.exports.getAll = async (req, res) => {
 			include: [
 				{ model: User, as: 'employee' },
 				{ model: User, as: 'client' },
-				{ model: Product, as: 'product' }
+				{ model: Product, as: 'products' },
+				{ model: Service, as: 'services' }
 			]
 		})
 	);
@@ -79,7 +89,8 @@ module.exports.getOrdersFromClient = async (req, res) => {
 			include: [
 				{ model: User, as: 'employee' },
 				{ model: User, as: 'client' },
-				{ model: Product, as: 'product' }
+				{ model: Product, as: 'products' },
+				{ model: Service, as: 'services' }
 			]
 		})
 	);
@@ -94,7 +105,8 @@ module.exports.getOrdersFromEmployee = async (req, res) => {
 			include: [
 				{ model: User, as: 'employee' },
 				{ model: User, as: 'client' },
-				{ model: Product, as: 'product' }
+				{ model: Product, as: 'products' },
+				{ model: Service, as: 'services' }
 			]
 		})
 	);
