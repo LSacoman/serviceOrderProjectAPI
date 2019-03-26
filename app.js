@@ -28,7 +28,7 @@ models.sequelize
 		console.error('Unable to connect to SQL database:', CONFIG.db_name, err);
 	});
 
-models.sequelize.sync({ force: true });
+//models.sequelize.sync({ force: true });
 
 app.use(cors());
 
