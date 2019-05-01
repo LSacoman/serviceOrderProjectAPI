@@ -4,8 +4,8 @@ const models = require('../models');
 
 // Create serviceOrder
 const create = async (req, res) => {
-    let err, serviceOrder, products, services;
-    
+	let err, serviceOrder, products, services;
+
 	if (req.body.client != null) {
 		[ err, client ] = await to(User.create(req.body.client));
 		if (err) return ReE(res, err, 422);
@@ -22,12 +22,10 @@ const create = async (req, res) => {
 	if (req.body.products != null) {
 		[ err, products ] = await to(serviceOrder.addProducts(req.body.products));
 		if (err) return ReE(res, err, 422);
-		
 	}
 	if (req.body.services != null) {
 		[ err, services ] = await to(serviceOrder.addServices(req.body.services));
 		if (err) return ReE(res, err, 422);
-		
 	}
 	serviceOrder = serviceOrder.toWeb();
 	serviceOrder.products = products;
@@ -70,9 +68,23 @@ module.exports.getAll = async (req, res) => {
 
 // Update serviceOrder
 module.exports.update = async (req, res) => {
-	[ err, serviceOrder ] = await to(ServiceOrder.update(req.body, { where: { id: req.params.id } }));
+	[ err, serviceOrder ] = await to(ServiceOrder.update(req.body, { where: { id: req.body.id } }));
 	if (err) return ReE(res, err, 422);
-	return ReS(res, { 'MSG:': 'Atualizado com Sucesso ServiceOrder de ID: ' + req.params.id }, 201);
+	return ReS(res, { 'MSG:': 'Atualizado com Sucesso ServiceOrder de ID: ' + req.body.id }, 201);
+};
+
+module.exports.addProductsAndServices = async (req, res) => {
+	let err, serviceOrder, products, services;
+	[ err, serviceOrder ] = await to(ServiceOrder.findByPk(req.body.id));
+	if (req.body.products != null) {
+		[ err, products ] = await to(serviceOrder.addProducts(req.body.products));
+		if (err) return ReE(res, err, 422);
+	}
+	if (req.body.services != null) {
+		[ err, services ] = await to(serviceOrder.addServices(req.body.services));
+		if (err) return ReE(res, err, 422);
+	}
+	return ReS(res, { 'MSG:': 'Atualizado com Sucesso ServiceOrder de ID: ' + req.body.id }, 201);
 };
 
 // Delete serviceOrder
@@ -85,7 +97,7 @@ module.exports.del = async (req, res) => {
 module.exports.getOrdersFromClient = async (req, res) => {
 	[ err, serviceOrder ] = await to(
 		ServiceOrder.findAll({
-            where: { clientId: req.params.id },
+			where: { clientId: req.params.id },
 			include: [
 				{ model: User, as: 'employee' },
 				{ model: User, as: 'client' },
@@ -101,7 +113,7 @@ module.exports.getOrdersFromClient = async (req, res) => {
 module.exports.getOrdersFromEmployee = async (req, res) => {
 	[ err, serviceOrder ] = await to(
 		ServiceOrder.findAll({
-            where: { employeeId: req.params.id },
+			where: { employeeId: req.params.id },
 			include: [
 				{ model: User, as: 'employee' },
 				{ model: User, as: 'client' },

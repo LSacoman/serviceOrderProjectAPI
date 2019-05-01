@@ -37,6 +37,7 @@ router.post('/serviceorder', ServiceOrderController.create);
 router.get('/serviceorder/:id', passport.authenticate('jwt', { session: false }), ServiceOrderController.getOne);
 router.get('/serviceorders', passport.authenticate('jwt', { session: false }), ServiceOrderController.getAll);
 router.put('/serviceorder', passport.authenticate('jwt', { session: false }), ServiceOrderController.update);
+router.put('/addproductsandservices', passport.authenticate('jwt', { session: false }), ServiceOrderController.addProductsAndServices);
 router.delete('/serviceorder/:id', passport.authenticate('jwt', { session: false }), ServiceOrderController.del);
 router.get('/serviceorder/:id', passport.authenticate('jwt', { session: false }), ServiceOrderController.getOrdersFromClient);
 router.get('/serviceorder/:id', passport.authenticate('jwt', { session: false }), ServiceOrderController.getOrdersFromEmployee);
