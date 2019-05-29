@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const UserController = require('../controllers/user.controller');
-const ProductController = require('../controllers/product.controller');
+const ProductController = require('../controllers/part.controller');
 const ServiceOrderController = require('../controllers/serviceOrder.controller');
 const ServiceController = require('../controllers/service.controller');
 const passport = require('passport');
@@ -21,11 +21,11 @@ router.post('/login', UserController.login);
 router.get('/verifytoken', UserController.verifytoken);
 
 
-router.post('/product', ProductController.create);
-router.get('/product/:id', passport.authenticate('jwt', { session: false }), ProductController.getOne);
+router.post('/part', ProductController.create);
+router.get('/part/:id', passport.authenticate('jwt', { session: false }), ProductController.getOne);
 router.get('/products', passport.authenticate('jwt', { session: false }), ProductController.getAll);
-router.put('/product', passport.authenticate('jwt', { session: false }), ProductController.update);
-router.delete('/product/:id', passport.authenticate('jwt', { session: false }), ProductController.del);
+router.put('/part', passport.authenticate('jwt', { session: false }), ProductController.update);
+router.delete('/part/:id', passport.authenticate('jwt', { session: false }), ProductController.del);
 
 router.post('/service', ServiceController.create);
 router.get('/service/:id', passport.authenticate('jwt', { session: false }), ServiceController.getOne);
@@ -37,9 +37,9 @@ router.post('/serviceorder', ServiceOrderController.create);
 router.get('/serviceorder/:id', passport.authenticate('jwt', { session: false }), ServiceOrderController.getOne);
 router.get('/serviceorders', passport.authenticate('jwt', { session: false }), ServiceOrderController.getAll);
 router.put('/serviceorder', passport.authenticate('jwt', { session: false }), ServiceOrderController.update);
-router.put('/addproductsandservices', passport.authenticate('jwt', { session: false }), ServiceOrderController.addProductsAndServices);
+router.put('/addproductsandservices', passport.authenticate('jwt', { session: false }), ServiceOrderController.addPartsAndServices);
 router.delete('/serviceorder/:id', passport.authenticate('jwt', { session: false }), ServiceOrderController.del);
-router.get('/serviceorder/:id', passport.authenticate('jwt', { session: false }), ServiceOrderController.getOrdersFromClient);
+router.get('/serviceorder/user/:id', passport.authenticate('jwt', { session: false }), ServiceOrderController.getOrdersFromClient);
 router.get('/serviceorder/:id', passport.authenticate('jwt', { session: false }), ServiceOrderController.getOrdersFromEmployee);
 
 

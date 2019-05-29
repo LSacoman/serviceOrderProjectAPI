@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-	var Model = sequelize.define('Product', {
+	var Model = sequelize.define('Part', {
 		model: DataTypes.STRING,
 		brand: DataTypes.STRING,
 		description: DataTypes.STRING

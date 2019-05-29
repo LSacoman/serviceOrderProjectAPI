@@ -1,10 +1,10 @@
-const { Product, User, ServiceOrder, Service } = require('../models');
+const { Part, User, ServiceOrder, Service } = require('../models');
 const { to, ReE, ReS } = require('../services/util.service');
 const models = require('../models');
 
 // Create serviceOrder
 const create = async (req, res) => {
-	let err, serviceOrder, products, services;
+	let err, serviceOrder, parts, services;
 
 	if (req.body.client != null) {
 		[ err, client ] = await to(User.create(req.body.client));
@@ -19,8 +19,8 @@ const create = async (req, res) => {
 
 	[ err, serviceOrder ] = await to(ServiceOrder.create(req.body));
 	if (err) return ReE(res, err, 422);
-	if (req.body.products != null) {
-		[ err, products ] = await to(serviceOrder.addProducts(req.body.products));
+	if (req.body.parts != null) {
+		[ err, parts ] = await to(serviceOrder.addParts(req.body.parts));
 		if (err) return ReE(res, err, 422);
 	}
 	if (req.body.services != null) {
@@ -28,7 +28,7 @@ const create = async (req, res) => {
 		if (err) return ReE(res, err, 422);
 	}
 	serviceOrder = serviceOrder.toWeb();
-	serviceOrder.products = products;
+	serviceOrder.parts = parts;
 	serviceOrder.services = services;
 	return ReS(res, { message: 'ServiceOrder criado com sucesso.', serviceOrder }, 201);
 };
@@ -41,7 +41,7 @@ module.exports.getOne = async (req, res) => {
 			include: [
 				{ model: User, as: 'employee' },
 				{ model: User, as: 'client' },
-				{ model: Product, as: 'products' },
+				{ model: Part, as: 'parts' },
 				{ model: Service, as: 'services' }
 			]
 		})
@@ -57,7 +57,7 @@ module.exports.getAll = async (req, res) => {
 			include: [
 				{ model: User, as: 'employee' },
 				{ model: User, as: 'client' },
-				{ model: Product, as: 'products' },
+				{ model: Part, as: 'parts' },
 				{ model: Service, as: 'services' }
 			]
 		})
@@ -70,14 +70,15 @@ module.exports.getAll = async (req, res) => {
 module.exports.update = async (req, res) => {
 	[ err, serviceOrder ] = await to(ServiceOrder.update(req.body, { where: { id: req.body.id } }));
 	if (err) return ReE(res, err, 422);
+	
 	return ReS(res, { 'MSG:': 'Atualizado com Sucesso ServiceOrder de ID: ' + req.body.id }, 201);
 };
 
-module.exports.addProductsAndServices = async (req, res) => {
-	let err, serviceOrder, products, services;
+module.exports.addPartsAndServices = async (req, res) => {
+	let err, serviceOrder, parts, services;
 	[ err, serviceOrder ] = await to(ServiceOrder.findByPk(req.body.id));
-	if (req.body.products != null) {
-		[ err, products ] = await to(serviceOrder.addProducts(req.body.products));
+	if (req.body.parts != null) {
+		[ err, parts ] = await to(serviceOrder.addParts(req.body.parts));
 		if (err) return ReE(res, err, 422);
 	}
 	if (req.body.services != null) {
@@ -101,7 +102,7 @@ module.exports.getOrdersFromClient = async (req, res) => {
 			include: [
 				{ model: User, as: 'employee' },
 				{ model: User, as: 'client' },
-				{ model: Product, as: 'products' },
+				{ model: Part, as: 'parts' },
 				{ model: Service, as: 'services' }
 			]
 		})
@@ -117,7 +118,7 @@ module.exports.getOrdersFromEmployee = async (req, res) => {
 			include: [
 				{ model: User, as: 'employee' },
 				{ model: User, as: 'client' },
-				{ model: Product, as: 'products' },
+				{ model: Part, as: 'parts' },
 				{ model: Service, as: 'services' }
 			]
 		})

@@ -7,9 +7,10 @@ module.exports = (sequelize, DataTypes) => {
 	var Model = sequelize.define('ServiceOrder', {
 		status: DataTypes.STRING,
 		requestDate: DataTypes.STRING,
+		product: DataTypes.STRING,
 		problemDescription: DataTypes.STRING,
 		solutionDescription: DataTypes.STRING,
-		solutionPrice: DataTypes.BOOLEAN
+		solutionPrice: DataTypes.STRING
     });
     
     Model.associate = function(models) {
@@ -23,10 +24,10 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 			as: 'client'
         });
-        Model.belongsToMany(models.Product, {
-            through: 'ServiceOrder_Product',
+        Model.belongsToMany(models.Part, {
+            through: 'ServiceOrder_Part',
 			allowNull: false,
-			as: 'products',
+			as: 'parts',
 			foreignKey: 'ServiceOrderId'
 		});
 		Model.belongsToMany(models.Service, {
