@@ -21,6 +21,8 @@
     "express": "^4.16.4",
     "morgan": "^1.9.1",
     "mysql2": "^1.6.5",
+    "nodemailer": "^6.2.1",
+    "nodemailer-sendgrid-transport": "^0.2.0",
     "parse-error": "^0.2.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
