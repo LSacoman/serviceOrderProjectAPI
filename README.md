@@ -19,4 +19,5 @@
 - Altere-as para que fiquem adequadas ao seu  ambiente.
 
 **Execução da API**
+- Inicie o MySQL ou o MariaDB;
 - Dentro da pasta do projeto execute 'npm run start' para iniciar a API.
