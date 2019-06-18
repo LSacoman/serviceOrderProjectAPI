@@ -96,9 +96,9 @@ const update = async (req, res) => {
 			console.log(user);
 			transporter.sendMail({
 				to: user.client.email,
-				from: 'leonardo@serviceorder.com',
+				from: 'admin@serviceorder.com',
 				subject: 'Maintence Status: Alteração no status de seu produto',
-				html: '<h1>Seu status agora é: ' + req.body.status + '</h1>'
+				html: '<h1>O status de seu produto agora é: ' + req.body.status + '</h1>'
 			}).then(email => {
 				console.log(email);
 			}).catch((emailerr) => {
